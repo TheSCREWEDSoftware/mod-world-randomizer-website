@@ -12,6 +12,7 @@
   <nav>
     <a href="index.html">Character</a>
     <a href="map.html">World map</a>
+    <a href="achievements.html">Achievements</a>
     <a href="config.html">Config update</a>
     <a href="about.html" class="active">What you need</a>
   </nav>
@@ -52,6 +53,19 @@
   </section>
 
   <section class="panel">
+    <h2>Based on</h2>
+    <p style="margin-top:0"><a href="https://www.youtube.com/@UncleChimpuss/playlists">UncleChimpus</a>'s YouTube
+      series <b>HC Randomized WoW</b>:</p>
+    <ul>
+      <li><a href="https://youtu.be/JjyZIukvaHg">I Randomized All of WoW Classic. Then I Did Hardcore</a>: the
+        randomized world and the <a href="achievements.html">achievements</a>.</li>
+      <li><a href="https://www.youtube.com/watch?v=StYmBXcMWY8&amp;list=PLTBbvJMyl1ksWwy8Zfic6vQYi3V0OrjyE">The World
+        is Being Corrupted</a>: the achievement rewards.</li>
+    </ul>
+    <p class="muted">A recreation of the series' ideas for AzerothCore (WotLK 3.3.5a).</p>
+  </section>
+
+  <section class="panel">
     <h2>What each page needs from the server</h2>
     <div class="tablewrap"><table class="conftable pages">
       <thead><tr><th>Page</th><th>In game</th><th>Server settings</th></tr></thead>
@@ -66,6 +80,10 @@
           <td>Shows the world your server builds for a seed: which zones are in which level bracket.</td>
           <td><code>Randomizer.World.Enable = 1</code>, and the seed, brackets and scope the page shows (it gives the
             lines to paste).</td></tr>
+        <tr><td><a href="achievements.html">Achievements</a></td>
+          <td>What you can earn in game, and its rewards (<code>.rach</code>, or the addon).</td>
+          <td><code>Randomizer.Achievements.Enable</code>; <code>Randomizer.Achievements.Expansion</code> picks
+            which versions count.</td></tr>
         <tr><td><a href="config.html">Config update</a></td>
           <td>Nothing in game: it updates your <code>.conf</code> file for mod-world-randomizer or
             mod-dynamic-scaling.</td>

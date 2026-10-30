@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Randomizer Achievements</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>World Randomizer</h1>
+  <nav>
+    <a href="index.html">Character</a>
+    <a href="map.html">World map</a>
+    <a href="achievements.html" class="active">Achievements</a>
+    <a href="config.html">Config update</a>
+    <a href="about.html">What you need</a>
+  </nav>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Achievements</h2>
+    <p class="muted" style="margin-top:0">Every achievement the module can give, with its rewards. They are
+      account-wide, like a roguelite's meta progression: a <b>run</b> is one character's life, <b>lifetime</b>
+      counts every character on the account, and the rewards count on every character of the account. In game:
+      <code>.rach</code>, or the RandomizerAchievements addon (<code>/randach</code>). Pick the content your server
+      runs: some achievements have a version for each expansion (<code>Randomizer.Achievements.Expansion</code>,
+      by default the server's stats era).</p>
+    <div class="controls">
+      <label class="field"><span>Content</span>
+        <select id="ach-exp">
+          <option value="1">Vanilla</option>
+          <option value="2">The Burning Crusade</option>
+          <option value="4" selected>Wrath of the Lich King</option>
+        </select>
+      </label>
+      <label class="field grow"><span>Search</span>
+        <input type="search" id="ach-search" placeholder="Name, description or reward (mount, talent, Mining...)">
+      </label>
+    </div>
+    <p id="ach-count" class="muted small" style="margin:10px 0 0"></p>
+  </section>
+
+  <div class="achlayout">
+    <nav class="panel achcats" id="ach-cats" aria-label="Categories"></nav>
+    <section class="panel achlist" id="ach-list"></section>
+  </div>
+</main>
+
+<div class="tooltip" id="tip"></div>
+
+<script src="achievements.js"></script>
+<script src="achievements-page.js"></script>
+</body>
+</html>

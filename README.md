@@ -25,6 +25,8 @@ The web pages of [mod-world-randomizer](https://github.com/TheSCREWEDSoftware/mo
   `aowow/Stuff/randomizer/`); without them it shows the zone outlines on a plain background.
 - `about.html`: what you need (AzerothCore and mod-world-randomizer on the server), what changes with
   mod-dynamic-scaling, and what the two addons do.
+- `achievements.html`: every achievement the module gives, with its rewards, for Vanilla, TBC or Wrath content.
+  `achievements.js` is written by the module's `tools/generate_achievements.py`.
 - `config.html`: drop an old `.conf` of mod-world-randomizer or mod-dynamic-scaling and get it back in the newest
   layout (your values kept, new settings added), plus the old file as a backup.
 
@@ -50,11 +52,19 @@ git submodule update --init --recursive
 The config update page also serves
 [mod-dynamic-scaling](https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling).
 
-Generated files come from the module's tools: `zones.js` from `tools/generate_from_aowow.py` and
-`conf-templates.js` from `tools/make_conf_templates.py` (both write into `web/`). Commit them here, then commit the
-new submodule commit in the module.
+Generated files come from the module's tools: `zones.js` from `tools/generate_from_aowow.py`, `achievements.js` from
+`tools/generate_achievements.py` and `conf-templates.js` from `tools/make_conf_templates.py` (all write into
+`web/`). Commit them here, then commit the new submodule commit in the module.
 
 ## Online
 
 GitHub Pages serves this repository as it is: Settings > Pages > "Deploy from a branch", `main`, `/ (root)`.
 `.nojekyll` makes it serve the files untouched.
+
+## Credits
+
+Based on [UncleChimpus](https://www.youtube.com/@UncleChimpuss/playlists)'s **HC Randomized WoW** series
+([I Randomized All of WoW Classic. Then I Did Hardcore](https://youtu.be/JjyZIukvaHg) for the randomized world and
+the achievements, [The World is Being Corrupted](https://www.youtube.com/watch?v=StYmBXcMWY8) for the achievement
+rewards), recreated here for AzerothCore.
+
