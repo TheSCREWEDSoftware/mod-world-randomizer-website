@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Randomizer: What You Need</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>World Randomizer</h1>
+  <nav>
+    <a href="index.html">Character</a>
+    <a href="map.html">World map</a>
+    <a href="config.html">Config update</a>
+    <a href="about.html" class="active">What you need</a>
+  </nav>
+</header>
+
+<main class="about">
+  <section class="panel">
+    <h2>What you need</h2>
+    <p>These pages work on their own in any browser: rolling characters, looking at the map and updating config files
+      need nothing installed. To <b>play</b> what they give you, your server needs the module.</p>
+    <div class="needs">
+      <div class="need req">
+        <span class="needtag">Required</span>
+        <h3>AzerothCore (WotLK 3.3.5a)</h3>
+        <p>The server the modules are built into.
+          <a href="https://github.com/azerothcore/azerothcore-wotlk">azerothcore-wotlk</a></p>
+      </div>
+      <div class="need req">
+        <span class="needtag">Required</span>
+        <h3>mod-world-randomizer</h3>
+        <p>The module these pages are made for: the world shuffle, rolls, co-op starts, hardcore and achievements.
+          <a href="https://github.com/TheSCREWEDSoftware/mod-world-randomizer">mod-world-randomizer</a></p>
+      </div>
+      <div class="need opt">
+        <span class="needtag">Works better with</span>
+        <h3>mod-dynamic-scaling</h3>
+        <p>Optional. Makes dungeons and the open world scale to each player inside the brackets the randomizer gives
+          them (see below). <a href="https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling">mod-dynamic-scaling</a>
+        </p>
+      </div>
+      <div class="need opt">
+        <span class="needtag">Optional</span>
+        <h3>The addons</h3>
+        <p>RandomizerAchievements and DynamicScaling, for the game client. Everything also works with chat
+          commands (see below).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>What each page needs from the server</h2>
+    <div class="tablewrap"><table class="conftable pages">
+      <thead><tr><th>Page</th><th>In game</th><th>Server settings</th></tr></thead>
+      <tbody>
+        <tr><td><a href="index.html">Character roller</a></td>
+          <td>Tie a character to its roll: <code>.randomizer roll &lt;code&gt; &lt;player&gt;</code> or the addon's
+            "My roll". Start where the page says: <code>.coop create &lt;zone&gt;</code>, <code>.coop join
+            &lt;code&gt;</code> or <code>.coop alone &lt;zone&gt;</code> (or the addon's Group tab).</td>
+          <td><code>Randomizer.Roll.Enable</code>, <code>Randomizer.Coop.Enable</code>. Start zones match the server
+            only with the same world seed and shuffle settings as on the World map page.</td></tr>
+        <tr><td><a href="map.html">World map</a></td>
+          <td>Shows the world your server builds for a seed: which zones are in which level bracket.</td>
+          <td><code>Randomizer.World.Enable = 1</code>, and the seed, brackets and scope the page shows (it gives the
+            lines to paste).</td></tr>
+        <tr><td><a href="config.html">Config update</a></td>
+          <td>Nothing in game: it updates your <code>.conf</code> file for mod-world-randomizer or
+            mod-dynamic-scaling.</td>
+          <td>None. Put the new file in your server's <code>configs/modules</code> and restart.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="panel">
+    <h2>With or without mod-dynamic-scaling</h2>
+    <p class="muted" style="margin-top:0">Both modules work alone. Installed together, with their collective
+      switches on (<code>Randomizer.Collective.DynamicScaling</code> and
+      <code>DynamicScaling.Collective.WorldRandomizer</code>, both on by default), they split the work. Turn either
+      switch off and they ignore each other.</p>
+    <div class="tablewrap"><table class="conftable compare">
+      <thead><tr><th></th><th>mod-world-randomizer alone</th><th>With mod-dynamic-scaling</th></tr></thead>
+      <tbody>
+        <tr><td><b>Open world</b></td>
+          <td>Each zone gets a new level bracket. Its creatures are replaced by creatures of that bracket, and the
+            ones that stay (quest targets, scripted ones) move their level into it. Levels are the same for
+            everyone.</td>
+          <td>Creatures also follow <b>each player's</b> level and <code>.scaling</code> choice, but never leave the
+            zone's bracket: a level 1 player in a 1-10 zone meets level 1 creatures, a level 9 one level 9s
+            (<code>DynamicScaling.Collective.WorldScaling</code>, on by default).</td></tr>
+        <tr><td><b>Dungeons</b></td>
+          <td>Follow the bracket of their entrance zone. By default (<code>Randomizer.Dungeons.Mode = 2</code>) their
+            creatures scale to the group's highest level, inside that bracket, bosses still above their trash.</td>
+          <td>mod-dynamic-scaling does that instead, in its Simple mode: the same bracket, plus extra stats and spell
+            power for every missing player, so small groups can clear them.</td></tr>
+        <tr><td><b>Players choose</b></td>
+          <td>Nothing to choose: the shuffled world is the same for everyone.</td>
+          <td>Each player picks Simple, Advanced or no scaling (<code>.scaling</code>, or the DynamicScaling
+            addon).</td></tr>
+        <tr><td><b>Also</b></td>
+          <td>Quests, quest rewards and drops follow the zone's new levels; hardcore, co-op starts, rolls,
+            achievements.</td>
+          <td>All of that, plus mod-dynamic-scaling's own features: dungeons for fewer players, entering at any
+            level, coming back alive at the dungeon entrance, XP for gray kills in scaled zones, cooldown resets.
+          </td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="panel">
+    <h2>The addons</h2>
+    <p class="muted" style="margin-top:0">For the WoW 3.3.5 client: unzip into <code>Interface\AddOns</code>. Each one
+      checks that the server runs its module and turns itself off if not, and tells you in chat when its version
+      doesn't match the server's. The server needs <code>AddonChannel = 1</code> in worldserver.conf (the
+      default).</p>
+    <div class="needs wide">
+      <div class="need">
+        <h3>RandomizerAchievements</h3>
+        <p class="muted small">Needs mod-world-randomizer.
+          <a href="https://github.com/TheSCREWEDSoftware/mod-world-randomizer/releases/latest">Download</a></p>
+        <ul>
+          <li>The account-wide achievements, with icons, rewards and progress, for you and your group
+            (<code>/randach</code>, or the minimap button).</li>
+          <li>A popup when you earn one, like the game's own.</li>
+          <li><b>My roll</b>: tie this character to its roll from the Character roller (the code from this site).</li>
+          <li><b>Group tab</b>: start alone or with a co-op party, pick your start zone, and see your party: level,
+            race, class, zone and roll.</li>
+          <li>Opens the talent frame before level 10 when the server gives talent points earlier.</li>
+        </ul>
+        <p class="muted small">Without it: <code>.rach</code>, <code>.randomizer roll</code> and <code>.coop</code>
+          in chat.</p>
+      </div>
+      <div class="need">
+        <h3>DynamicScaling</h3>
+        <p class="muted small">Needs mod-dynamic-scaling.
+          <a href="https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling/releases/latest">Download</a></p>
+        <ul>
+          <li>Asks on login which leveling experience you want: No Scaling, Simple or Advanced.</li>
+          <li>A window (<code>/dscale</code>, or the minimap button) with your choice and the creatures around you:
+            their own level, and what they would be for you in Simple and Advanced.</li>
+        </ul>
+        <p class="muted small">Without it: <code>.scaling simple</code>, <code>.scaling advanced</code> or
+          <code>.scaling off</code> in chat.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="tooltip" id="tip"></div>
+</body>
+</html>

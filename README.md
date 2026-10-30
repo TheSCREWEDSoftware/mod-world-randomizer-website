@@ -23,6 +23,8 @@ The web pages of [mod-world-randomizer](https://github.com/TheSCREWEDSoftware/mo
 - `map.html`: the world map coloured by bracket, original or shuffled, for a seed, with the config lines for the
   server. The map pictures come from aowow (`../../static/images/wow/maps/enus/normal/` when the pages sit in
   `aowow/Stuff/randomizer/`); without them it shows the zone outlines on a plain background.
+- `about.html`: what you need (AzerothCore and mod-world-randomizer on the server), what changes with
+  mod-dynamic-scaling, and what the two addons do.
 - `config.html`: drop an old `.conf` of mod-world-randomizer or mod-dynamic-scaling and get it back in the newest
   layout (your values kept, new settings added), plus the old file as a backup.
 
