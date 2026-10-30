@@ -62,7 +62,10 @@
       <li><a href="https://www.youtube.com/watch?v=StYmBXcMWY8&amp;list=PLTBbvJMyl1ksWwy8Zfic6vQYi3V0OrjyE">The World
         is Being Corrupted</a>: the achievement rewards.</li>
     </ul>
-    <p class="muted">A recreation of the series' ideas for AzerothCore (WotLK 3.3.5a).</p>
+    <p>A recreation of the series' ideas for AzerothCore (WotLK 3.3.5a):
+      <a href="https://github.com/TheSCREWEDSoftware/mod-world-randomizer">mod-world-randomizer</a>
+      rebuilds the shuffled world and the achievements with their rewards, and adds the TBC and Wrath versions,
+      co-op starts, rolls and these pages.</p>
   </section>
 
   <section class="panel">
@@ -86,7 +89,7 @@
             which versions count.</td></tr>
         <tr><td><a href="config.html">Config update</a></td>
           <td>Nothing in game: it updates your <code>.conf</code> file for mod-world-randomizer or
-            mod-dynamic-scaling.</td>
+            <a href="https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling">mod-dynamic-scaling</a>.</td>
           <td>None. Put the new file in your server's <code>configs/modules</code> and restart.</td></tr>
       </tbody>
     </table></div>
@@ -99,7 +102,8 @@
       <code>DynamicScaling.Collective.WorldRandomizer</code>, both on by default), they split the work. Turn either
       switch off and they ignore each other.</p>
     <div class="tablewrap"><table class="conftable compare">
-      <thead><tr><th></th><th>mod-world-randomizer alone</th><th>With mod-dynamic-scaling</th></tr></thead>
+      <thead><tr><th></th><th>mod-world-randomizer alone</th><th>With <a
+        href="https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling">mod-dynamic-scaling</a></th></tr></thead>
       <tbody>
         <tr><td><b>Open world</b></td>
           <td>Each zone gets a new level bracket. Its creatures are replaced by creatures of that bracket, and the
@@ -111,7 +115,8 @@
         <tr><td><b>Dungeons</b></td>
           <td>Follow the bracket of their entrance zone. By default (<code>Randomizer.Dungeons.Mode = 2</code>) their
             creatures scale to the group's highest level, inside that bracket, bosses still above their trash.</td>
-          <td>mod-dynamic-scaling does that instead, in its Simple mode: the same bracket, plus extra stats and spell
+          <td><a href="https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling">mod-dynamic-scaling</a>
+            does that instead, in its Simple mode: the same bracket, plus extra stats and spell
             power for every missing player, so small groups can clear them.</td></tr>
         <tr><td><b>Players choose</b></td>
           <td>Nothing to choose: the shuffled world is the same for everyone.</td>
@@ -120,7 +125,9 @@
         <tr><td><b>Also</b></td>
           <td>Quests, quest rewards and drops follow the zone's new levels; hardcore, co-op starts, rolls,
             achievements.</td>
-          <td>All of that, plus mod-dynamic-scaling's own features: dungeons for fewer players, entering at any
+          <td>All of that, plus <a
+            href="https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling">mod-dynamic-scaling</a>'s own
+            features: dungeons for fewer players, entering at any
             level, coming back alive at the dungeon entrance, XP for gray kills in scaled zones, cooldown resets.
           </td></tr>
       </tbody>
@@ -152,7 +159,8 @@
       </div>
       <div class="need">
         <h3>DynamicScaling</h3>
-        <p class="muted small">Needs mod-dynamic-scaling.
+        <p class="muted small">Needs <a
+          href="https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling">mod-dynamic-scaling</a>.
           <a href="https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling/releases/latest">Download</a></p>
         <ul>
           <li>Asks on login which leveling experience you want: No Scaling, Simple or Advanced.</li>

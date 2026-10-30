@@ -24,10 +24,11 @@ The web pages of [mod-world-randomizer](https://github.com/TheSCREWEDSoftware/mo
   server. The map pictures come from aowow (`../../static/images/wow/maps/enus/normal/` when the pages sit in
   `aowow/Stuff/randomizer/`); without them it shows the zone outlines on a plain background.
 - `about.html`: what you need (AzerothCore and mod-world-randomizer on the server), what changes with
-  mod-dynamic-scaling, and what the two addons do.
+  [mod-dynamic-scaling](https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling), and what the two addons do.
 - `achievements.html`: every achievement the module gives, with its rewards, for Vanilla, TBC or Wrath content.
   `achievements.js` is written by the module's `tools/generate_achievements.py`.
-- `config.html`: drop an old `.conf` of mod-world-randomizer or mod-dynamic-scaling and get it back in the newest
+- `config.html`: drop an old `.conf` of mod-world-randomizer or
+  [mod-dynamic-scaling](https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling) and get it back in the newest
   layout (your values kept, new settings added), plus the old file as a backup.
 
 `randomizer.js` is the same shuffle as the module's `WorldRandomizer.cpp`, so a seed shows exactly the world the
