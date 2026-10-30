@@ -1,8 +1,21 @@
 # mod-world-randomizer-website
 
 The web pages of [mod-world-randomizer](https://github.com/TheSCREWEDSoftware/mod-world-randomizer), an AzerothCore
-(WotLK 3.3.5) module that shuffles the world. Plain HTML and JavaScript, no build step: open `index.html`, or use
-them online at <https://thescrewedsoftware.github.io/mod-world-randomizer-website/>.
+(WotLK 3.3.5) module that shuffles the world. Plain HTML and JavaScript, no build step.
+
+## Use it
+
+- **Online**: <https://thescrewedsoftware.github.io/mod-world-randomizer-website/>, nothing to install.
+- **Locally, on its own**:
+
+  ```sh
+  git clone https://github.com/TheSCREWEDSoftware/mod-world-randomizer-website.git
+  ```
+
+  then open `index.html` in your browser.
+- **Locally, with the module**: it is the module's `web/` folder (see [In the module](#in-the-module)).
+
+## Pages
 
 - `index.html`: character roller and picker, for one player or a party. Rules, bans, drafts, trades, codes that fit
   in the game's chat (`.randomizer roll <code> <player>` or the addon's "My roll"), start zones, links and files to
@@ -21,10 +34,19 @@ server builds. Defaults for the roller are in `roller-config.js`.
 This repository is the module's `web/` folder, as a git submodule:
 
 ```sh
-git clone --recursive https://github.com/TheSCREWEDSoftware/mod-world-randomizer.git
-# or, in a clone made without --recursive:
-git submodule update --init
+# A new clone of the module (in your AzerothCore modules folder):
+git clone --recurse-submodules https://github.com/TheSCREWEDSoftware/mod-world-randomizer.git
+
+# A clone you already have (empty web/ folder):
+git submodule update --init --recursive
+
+# Later, to get a newer website along with the module:
+git pull --recurse-submodules
+git submodule update --init --recursive
 ```
+
+The config update page also serves
+[mod-dynamic-scaling](https://github.com/TheSCREWEDSoftware/mod-dynamic-scaling).
 
 Generated files come from the module's tools: `zones.js` from `tools/generate_from_aowow.py` and
 `conf-templates.js` from `tools/make_conf_templates.py` (both write into `web/`). Commit them here, then commit the
