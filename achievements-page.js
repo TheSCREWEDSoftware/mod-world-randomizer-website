@@ -6,8 +6,8 @@
   'use strict';
 
   var ALL = (window.RANDOMIZER_ACHIEVEMENTS || {}).achievements || [];
-  // WoW icons by name (the module stores the game's icon names); hidden when they can't load
-  var ICON_URL = 'https://wow.zamimg.com/images/wow/icons/medium/';
+  // WoW icons by name (the module stores the game's icon names), kept in img/ach/ (from aowow); hidden if missing
+  var ICON_URL = 'img/ach/';
   var EXP_NAMES = { 1: 'Vanilla', 2: 'TBC', 4: 'Wrath' };
   var state = { exp: 4, cat: 0, search: '' };
 

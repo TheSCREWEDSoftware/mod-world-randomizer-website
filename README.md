@@ -69,6 +69,14 @@ Based on [UncleChimpus](https://www.youtube.com/@UncleChimpuss/playlists)'s **HC
 the achievements, [The World is Being Corrupted](https://www.youtube.com/watch?v=StYmBXcMWY8) for the achievement
 rewards), recreated here for AzerothCore.
 
+## Disclaimer
+
+World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard
+Entertainment, Inc. The game's names, icons (`img/ach/`, from the game's files), images and map pictures belong to
+Blizzard Entertainment; they are not ours and are used only to describe the game. This is a free, non-commercial fan
+project, not made, endorsed or supported by Blizzard Entertainment. The license of this repository covers its own code
+only, not Blizzard's assets.
+
 ## Made with
 
 Made with the help of [Claude](https://claude.ai), Anthropic's AI assistant: written and reviewed together with it, then

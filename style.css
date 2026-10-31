@@ -651,3 +651,6 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 5px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+.sitefoot { max-width: 1240px; margin: 0 auto 28px; padding: 0 16px; font-size: 12px; line-height: 1.5;
+  color: var(--muted); text-align: center; }
