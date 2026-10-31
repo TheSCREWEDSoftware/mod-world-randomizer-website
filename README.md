@@ -69,3 +69,7 @@ Based on [UncleChimpus](https://www.youtube.com/@UncleChimpuss/playlists)'s **HC
 the achievements, [The World is Being Corrupted](https://www.youtube.com/watch?v=StYmBXcMWY8) for the achievement
 rewards), recreated here for AzerothCore.
 
+## Made with
+
+Made with the help of [Claude](https://claude.ai), Anthropic's AI assistant: written and reviewed together with it, then
+tested and published by [Ryan Turner (TheSCREWEDSoftware)](https://github.com/TheSCREWEDSoftware).
