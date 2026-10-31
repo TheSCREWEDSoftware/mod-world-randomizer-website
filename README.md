@@ -19,7 +19,12 @@ The web pages of [mod-world-randomizer](https://github.com/TheSCREWEDSoftware/mo
 
 - `index.html`: character roller and picker, for one player or a party. Rules, bans, drafts, trades, codes that fit
   in the game's chat (`.randomizer roll <code> <player>` or the addon's "My roll"), start zones, links and files to
-  share a party.
+  share a party. **Play together live**: open a room and everyone with its link or code sees the same party change
+  as it happens (`live.js`). The browsers connect straight to each other (WebRTC) and find each other through
+  public Nostr relays, with [Trystero](https://github.com/dmotz/trystero) (MIT, bundled in `vendor/`), so no server
+  is needed; it only works when the page is opened from a web address (GitHub Pages, a local web server), not from
+  a file, and everything else works without it. To try it in two tabs of one browser without the relays, add
+  `?live=local` to the address.
 - `map.html`: the world map coloured by bracket, original or shuffled, for a seed, with the config lines for the
   server. The map pictures come from aowow (`../../static/images/wow/maps/enus/normal/` when the pages sit in
   `aowow/Stuff/randomizer/`); without them it shows the zone outlines on a plain background.

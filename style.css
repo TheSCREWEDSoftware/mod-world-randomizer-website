@@ -654,3 +654,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 .sitefoot { max-width: 1240px; margin: 0 auto 28px; padding: 0 16px; font-size: 12px; line-height: 1.5;
   color: var(--muted); text-align: center; }
+
+/* Live rooms (index.html) */
+.live-code {
+  font-size: 20px; letter-spacing: 0.18em; color: var(--gold); font-family: ui-monospace, Consolas, monospace;
+}
+.live-codebox { text-transform: uppercase; letter-spacing: 0.12em; width: 9em; }
+.live-codebox::placeholder { text-transform: none; letter-spacing: normal; }

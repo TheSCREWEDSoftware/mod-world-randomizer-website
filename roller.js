@@ -1789,6 +1789,32 @@
       ' <span class="bad">(too long for one chat line: share the players\' own codes instead)</span>' :
       ' (fits in one chat line)');
     save();
+    afterRender.forEach(function (f) { f(); });
+  }
+
+  // ---- Live rooms (live.js): the part of the page everyone in a room shares, and taking it from someone else ----
+  // Not shared: the display, the open player tab, and anything only one browser keeps (the map page's view)
+
+  var afterRender = [];
+
+  function sharedState() {
+    var map = worldSettings();
+    return {
+      era: state.era, hardcore: state.hardcore, party: state.party, players: state.players,
+      world: map.seed ? [map.seed, map.brackets, map.scope, map.balanced, map.adjacent, map.factionStarts] : null
+    };
+  }
+
+  function applyShared(shared) {
+    if (!shared || !Array.isArray(shared.players) || !shared.players.length) return false;
+    if (ERAS.indexOf(shared.era) >= 0) state.era = shared.era;
+    state.hardcore = !!shared.hardcore;
+    state.party = normalizeRules(shared.party);
+    state.players = shared.players.map(function (p, i) { return normalizePlayer(p, i + 1); });
+    if (!(state.tab < state.players.length)) state.tab = 0;
+    if (shared.world) applyWorld(shared.world);
+    render();
+    return true;
   }
 
   // ---- Character picker (a game-like character creation; the preferences panel stays for random rolls) ----
@@ -2757,7 +2783,10 @@
     state: function () { return state; }, rollEveryone: rollEveryone, rollPlayer: rollPlayer, reroll: reroll,
     doTrade: doTrade, tradeCheck: tradeCheck, partyCovered: partyCovered, characterCode: characterCode,
     partyCode: partyCode, loadCodes: loadCodes, message: function () { return lastMessage; }, newPlayer: newPlayer,
-    render: render
+    render: render,
+    // live.js
+    shared: sharedState, applyShared: applyShared, busy: function () { return !!wiz; },
+    afterRender: function (f) { afterRender.push(f); }
   };
 
   // Opened from a link (index.html#WR5...): load that party, rules and seed

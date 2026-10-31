@@ -19,6 +19,30 @@
 </header>
 
 <main>
+  <section class="panel" id="live-panel">
+    <h2>Play together live</h2>
+    <p class="muted" style="margin-top:0">Open a room and send your friends its link or code: everyone in it sees the
+      same party, and each roll, reroll, pick or rule change shows up for all of you as it happens. Your browsers
+      connect straight to each other, so people in the room can see each other's IP address; on some strict
+      networks it can't connect, then use the codes below.</p>
+    <div id="live-out" class="controls">
+      <label class="field"><span>Your name</span>
+        <input type="text" id="live-name" maxlength="24" placeholder="Shown to the others">
+      </label>
+      <button id="live-create">Open a room</button>
+      <label class="field"><span>Room code</span>
+        <input type="text" id="live-join-code" maxlength="12" placeholder="e.g. K7MPQ2" class="live-codebox">
+      </label>
+      <button class="quiet" id="live-join">Join</button>
+    </div>
+    <div id="live-in" class="controls" style="display:none">
+      <div class="field"><span>Room</span><b id="live-code" class="live-code"></b></div>
+      <button class="quiet" id="live-copy">Copy link</button>
+      <button class="quiet danger" id="live-leave">Leave</button>
+    </div>
+    <p id="live-msg" class="muted small" style="margin:10px 0 0"></p>
+  </section>
+
   <section class="panel">
     <h2>Paste an old code</h2>
     <p class="muted" style="margin-top:0">Codes from before the short format still load. Paste one here to load it
@@ -231,5 +255,6 @@
 <script src="zones.js"></script>
 <script src="randomizer.js"></script>
 <script src="roller.js"></script>
+<script src="live.js"></script>
 </body>
 </html>
