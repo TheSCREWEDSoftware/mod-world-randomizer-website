@@ -244,7 +244,7 @@
   function defaultRules() {
     var rules = {
       faction: 'same', limit: { race: 0, cls: 1, spec: 0, prof: 0 }, profSlot: false, compat: 'off',
-      pick: 'free', draft: { race: 1, cls: 1, spec: 1, prof: 1 },
+      pick: 'free', draft: { race: 1, cls: 1, spec: 1, prof: 1 }, draftFor: 'all',
       ban: { faction: {}, race: {}, cls: {}, spec: {}, prof: {} }
     };
     var c = CONFIG.rules;
@@ -252,6 +252,7 @@
     if (['same', 'free', 'different'].indexOf(c.faction) >= 0) rules.faction = c.faction;
     if (['off', 'player', 'party'].indexOf(c.compat) >= 0) rules.compat = c.compat;
     if (['free', 'draft'].indexOf(c.pick) >= 0) rules.pick = c.pick;
+    if (['all', 'self'].indexOf(c.draftFor) >= 0) rules.draftFor = c.draftFor;
     rules.profSlot = !!c.profSlot;
     DRAFT_CATS.forEach(function (k) {
       if (c.limit && c.limit[k] !== undefined) rules.limit[k] = Math.max(0, Math.min(40, Number(c.limit[k]) || 0));
@@ -279,6 +280,7 @@
     }
     rules.profSlot = r.profSlot !== undefined ? !!r.profSlot : r.profDup === 'slot';
     if (r.pick === 'free' || r.pick === 'draft') rules.pick = r.pick;
+    if (r.draftFor === 'all' || r.draftFor === 'self') rules.draftFor = r.draftFor;
     if (r.draft) DRAFT_CATS.forEach(function (k) { rules.draft[k] = Math.max(0, Number(r.draft[k]) || 0); });
     if (r.ban) Object.keys(rules.ban).forEach(function (k) { rules.ban[k] = Object.assign({}, r.ban[k] || {}); });
     return rules;
@@ -365,22 +367,25 @@
 
   // ---- Drawing one thing ----
 
-  // Banned by the rules (or its faction / class is)
-  function banned(cat, key) {
+  // Banned by the rules (or its faction / class is), or in the draft. p: the player it's for (personal draft bans
+  // only count for the player who made them)
+  function banned(cat, key, p) {
     var ban = state.party.ban;
     if (cat === 'faction') return !!ban.faction[key];
-    if (cat === 'race') return !!ban.race[key] || !!ban.faction[RACES[key].faction] || !!draftedBy('race', key);
-    if (cat === 'class') return !!ban.cls[key] || !!draftedBy('cls', key);
+    if (cat === 'race') return !!ban.race[key] || !!ban.faction[RACES[key].faction] || !!draftedBy('race', key, p);
+    if (cat === 'class') return !!ban.cls[key] || !!draftedBy('cls', key, p);
     if (cat === 'spec') {
       var cls = key.split('-')[0];
-      return !!ban.spec[key] || !!ban.cls[cls] || !!draftedBy('spec', key) || !!draftedBy('cls', cls);
+      return !!ban.spec[key] || !!ban.cls[cls] || !!draftedBy('spec', key, p) || !!draftedBy('cls', cls, p);
     }
-    return !!ban.prof[key] || !!draftedBy('prof', key);
+    return !!ban.prof[key] || !!draftedBy('prof', key, p);
   }
 
-  // The player who banned it in the draft, or null
-  function draftedBy(dcat, key) {
+  // The player whose draft ban covers it, or null. Shared draft bans (draftFor 'all') count for everyone; personal
+  // ones only for the player who made them, so they need p
+  function draftedBy(dcat, key, p) {
     if (state.party.pick !== 'draft') return null;
+    if (state.party.draftFor === 'self') return p && p.draft[dcat].indexOf(String(key)) >= 0 ? p : null;
     for (var i = 0; i < state.players.length; i++) {
       if (state.players[i].draft[dcat].indexOf(String(key)) >= 0) return state.players[i];
     }
@@ -388,7 +393,7 @@
   }
 
   function isAllowed(p, cat, key) {
-    if (banned(cat, key)) return false;
+    if (banned(cat, key, p)) return false;
     var s = p.settings.cats[cat];
     if (s.mode === 'pick') return s.pick === key;
     if (!s.allow[key]) return false;
@@ -1219,6 +1224,7 @@
       w.put(players.length - 1, 6);
     }
     players.forEach(function (p) { writePlayer(w, p, party ? state.players.indexOf(p) : 0); });
+    if (party) w.flag(state.party.draftFor === 'self'); // at the end, so codes from before still read
     return 'WR5.' + w.toString();
   }
 
@@ -1250,6 +1256,9 @@
       count = r.get(6) + 1;
     }
     for (var i = 0; i < count; i++) out.players.push(readPlayer(r, i, version));
+    if (party && out.rules && version !== 4) {
+      try { out.rules.draftFor = r.flag() ? 'self' : 'all'; } catch (e) { /* a code from before: shared */ }
+    }
     return out;
   }
 
@@ -1601,7 +1610,7 @@
 
   // Why an item can't be chosen at all here, '' if it can: banned, or its faction / class is off for this player
   function blockedReason(p, cat, key) {
-    if (banned(cat, key)) return 'banned by the rules';
+    if (banned(cat, key, p)) return 'banned by the rules';
     if (cat === 'race' && !isAllowed(p, 'faction', RACES[key].faction)) {
       return 'the ' + itemName('faction', RACES[key].faction) + ' is off for ' + p.name;
     }
@@ -1772,6 +1781,7 @@
     $('rule-pick').value = state.party.pick;
     DRAFT_CATS.forEach(function (k) { $('draft-' + k).value = state.party.draft[k]; });
     $('draft-box').style.display = state.party.pick === 'draft' ? '' : 'none';
+    $('draft-for').value = state.party.draftFor;
     $('compat').value = state.party.compat;
     $('roll-all').textContent = state.players.length > 1 ? 'Roll everyone' : 'Roll';
   }
@@ -1814,7 +1824,30 @@
     if (!(state.tab < state.players.length)) state.tab = 0;
     if (shared.world) applyWorld(shared.world);
     render();
+    refreshWizard();
     return true;
+  }
+
+  // The character picker stays open through a change from someone else: redraw it with the new bans and picks,
+  // dropping what this player had chosen if it isn't open to them any more
+  function refreshWizard() {
+    var w = wiz;
+    if (!w) return;
+    if (w.player >= state.players.length) { closeWizard(); return; }
+    if (w.player >= 0) {
+      if (w.race && !raceChoices(w.player, w.faction).some(function (r) { return r.key === w.race && !r.why; })) {
+        w.race = ''; w.cls = ''; w.spec = '';
+        w.note = 'Your race was just taken or banned: pick another.';
+      }
+      if (w.cls && !classChoices(w.player, w.race || '1').some(function (c) { return c.key === w.cls && !c.why; })) {
+        w.cls = ''; w.spec = '';
+        w.note = 'Your class was just taken or banned: pick another.';
+      }
+      if (w.spec && !specChoices(w.player, w.cls).some(function (sp) { return sp.key === w.spec && !sp.why; })) {
+        w.spec = '';
+      }
+    }
+    renderWizard();
   }
 
   // ---- Character picker (a game-like character creation; the preferences panel stays for random rolls) ----
@@ -1886,10 +1919,18 @@
     return partyContext(i);
   }
 
+  // "banned by Ann in the draft" when a draft ban is why, else "banned by the rules"
+  function bannedWhy(dcat, key, i) {
+    var p = state.players[i];
+    var by = draftedBy(dcat, key, p) || (dcat === 'spec' ? draftedBy('cls', key.split('-')[0], p) : null);
+    if (!by) return 'banned by the rules';
+    return by === p ? 'you banned it in the draft' : 'banned by ' + by.name + ' in the draft';
+  }
+
   function factionChoices(i) {
     var ctx = pickContext(i);
     return KEYS.faction.map(function (f) {
-      var why = banned('faction', f) ? 'banned by the rules' :
+      var why = banned('faction', f, state.players[i]) ? 'banned by the rules' :
         ctx.faction && ctx.faction !== f ? 'the party is ' + itemName('faction', ctx.faction) + ' (same faction rule)' :
           ctx.notFaction[f] ? 'another player has it (all different rule)' :
             !raceChoices(i, f).some(function (r) { return !r.why; }) ? 'no race of it is left' : '';
@@ -1901,7 +1942,8 @@
     var ctx = pickContext(i);
     return KEYS.race.filter(function (r) { return RACES[r].faction === faction && inEra('race', r, state.era); })
       .map(function (r) {
-        var why = banned('race', r) ? 'banned by the rules' : ctx.race[r] ? 'the party already has enough' :
+        var why = banned('race', r, state.players[i]) ? bannedWhy('race', r, i) :
+          ctx.race[r] ? 'the party already has enough' :
           !classChoices(i, r).some(function (c) { return !c.why; }) ? 'no class of it is left' : '';
         return { key: r, why: why };
       });
@@ -1910,7 +1952,8 @@
   function classChoices(i, race) {
     var ctx = pickContext(i);
     return COMBOS[race].map(String).filter(function (c) { return inEra('class', c, state.era); }).map(function (c) {
-      var why = banned('class', c) ? 'banned by the rules' : ctx.cls[c] ? 'the party already has enough' :
+      var why = banned('class', c, state.players[i]) ? bannedWhy('cls', c, i) :
+        ctx.cls[c] ? 'the party already has enough' :
         !specChoices(i, c).some(function (sp) { return !sp.why; }) ? 'no spec of it is left' : '';
       return { key: c, why: why };
     });
@@ -1920,14 +1963,15 @@
     var ctx = pickContext(i);
     return [0, 1, 2].map(function (n) {
       var key = cls + '-' + n;
-      return { key: key, why: banned('spec', key) ? 'banned by the rules' : ctx.spec[key] ?
+      return { key: key, why: banned('spec', key, state.players[i]) ? bannedWhy('spec', key, i) : ctx.spec[key] ?
         'the party already has enough' : '' };
     });
   }
 
   function profChoices(i, slot, other) {
     var ctx = pickContext(i);
-    return KEYS.prof1.filter(function (k) { return inEra('prof1', k, state.era) && !banned('prof1', k); })
+    var me = state.players[i];
+    return KEYS.prof1.filter(function (k) { return inEra('prof1', k, state.era) && !banned('prof1', k, me); })
       .map(function (k) {
         var prof = Number(k);
         var why = prof === other ? 'already picked' : ctx.profAny[prof] ? 'the party already has enough' :
@@ -2135,7 +2179,8 @@
       var dcats = { race: 'race', cls: 'class', spec: 'spec', prof: 'prof1' };
       body = '<p class="muted">Draft: ban up to ' + DRAFT_CATS.map(function (k) {
         return limits[k] + ' ' + dlabels[k].toLowerCase();
-      }).join(', ') + ' for everyone. Bans are optional; click a slashed one to take it back.</p>' +
+      }).join(', ') + (state.party.draftFor === 'self' ? ' for yourself (personal bans: they only stop ' +
+        'you).' : ' for everyone (shared bans).') + ' Bans are optional; click a slashed one to take it back.</p>' +
         DRAFT_CATS.filter(function (k) { return limits[k] > 0; }).map(function (k) {
           var cat = dcats[k];
           var used = p.draft[k].length;
@@ -2143,8 +2188,8 @@
           return '<h3 class="wsub">' + dlabels[k] + ' <span class="muted small">(' + used + ' of ' + limits[k] +
             ' banned)</span></h3><div class="items' + (k === 'spec' ? ' specs' : '') + '">' + keys.map(function (key) {
             var mine = p.draft[k].indexOf(key) >= 0;
-            var by = mine ? null : draftedBy(k, key);
-            var rule = !mine && !by && banned(cat, key);
+            var by = mine ? null : draftedBy(k, key, p);
+            var rule = !mine && !by && banned(cat, key, p);
             var full = !mine && used >= limits[k];
             var why = by ? 'banned by ' + by.name : rule ? 'banned by the rules' : full ? 'no bans left' : '';
             var name = itemName(cat, key);
@@ -2558,6 +2603,7 @@
   });
   $('prof-slot').addEventListener('change', function () { state.party.profSlot = this.checked; render(); });
   $('rule-pick').addEventListener('change', function () { state.party.pick = this.value; render(); });
+  $('draft-for').addEventListener('change', function () { state.party.draftFor = this.value; render(); });
   DRAFT_CATS.forEach(function (k) {
     $('draft-' + k).addEventListener('change', function () {
       state.party.draft[k] = Math.max(0, Math.min(15, Math.floor(Number(this.value) || 0)));
@@ -2571,7 +2617,7 @@
   function rulesForFile() {
     var r = state.party;
     var out = { faction: r.faction, limit: r.limit, profSlot: r.profSlot, compat: r.compat, pick: r.pick,
-      draft: r.draft, ban: {} };
+      draft: r.draft, draftFor: r.draftFor, ban: {} };
     Object.keys(r.ban).forEach(function (k) {
       out.ban[k] = Object.keys(r.ban[k]).filter(function (key) { return r.ban[k][key]; });
     });
@@ -2785,7 +2831,7 @@
     partyCode: partyCode, loadCodes: loadCodes, message: function () { return lastMessage; }, newPlayer: newPlayer,
     render: render,
     // live.js
-    shared: sharedState, applyShared: applyShared, busy: function () { return !!wiz; },
+    shared: sharedState, applyShared: applyShared, busy: function () { return !!wiz; }, itemName: itemName,
     afterRender: function (f) { afterRender.push(f); }
   };
 

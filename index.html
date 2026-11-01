@@ -37,10 +37,15 @@
     </div>
     <div id="live-in" class="controls" style="display:none">
       <div class="field"><span>Room</span><b id="live-code" class="live-code"></b></div>
+      <label class="field"><span>You play <i class="info" data-tip="Names that player after you, so everyone sees
+          who banned or picked what">i</i></span>
+        <select id="live-me"></select>
+      </label>
       <button class="quiet" id="live-copy">Copy link</button>
       <button class="quiet danger" id="live-leave">Leave</button>
     </div>
     <p id="live-msg" class="muted small" style="margin:10px 0 0"></p>
+    <ul id="live-feed" class="live-feed" style="display:none" aria-live="polite"></ul>
   </section>
 
   <section class="panel">
@@ -152,7 +157,13 @@
           <option value="draft">Draft (each player bans some first)</option>
         </select>
       </label>
-      <div class="field" id="draft-box"><span>Bans per player in the draft</span>
+      <div class="field" id="draft-box"><span>Bans per player in the draft
+        <i class="info" data-tip="Shared: a ban stops everyone from taking it. Personal: it only stops the player who
+          banned it (things they don't want for themselves).">i</i></span>
+        <select id="draft-for" style="margin-bottom:6px">
+          <option value="all">Shared: they stop everyone</option>
+          <option value="self">Personal: they only stop who banned</option>
+        </select>
         <div class="checks limits" style="padding:2px 0">
           <label class="check">Races <input type="number" min="0" max="15" id="draft-race"></label>
           <label class="check">Classes <input type="number" min="0" max="15" id="draft-cls"></label>
